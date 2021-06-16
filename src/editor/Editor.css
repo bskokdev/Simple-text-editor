@@ -32,7 +32,5 @@
 }
 
 .menu-item {
-    -fx-border-style: hidden hidden solid hidden;
-    -fx-border-width: 1;
-    -fx-border-color: #9CA3AF;
+    -fx-text-alignment: left;
 }
