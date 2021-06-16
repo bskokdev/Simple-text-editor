@@ -39,6 +39,7 @@ public class EditorController implements Initializable {
   private FileChooser fileChooser;
   private Stage stage;
   private EditorModel editorModel;
+  //  lists for choice boxes
   private final ObservableList<Integer> fontSizes = FXCollections.observableArrayList(1,2,3);
   private final ObservableList<String> fonts = FXCollections.observableArrayList("Arial", "Times new Roman", "Comic Sans");
 
@@ -49,7 +50,7 @@ public class EditorController implements Initializable {
   //  on load
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    // defining the model
+    // defining the model & file chooser
     this.editorModel = new EditorModel();
     this.fileChooser = new FileChooser();
     // sets the file types to be stored as in the save as dialog window
@@ -88,16 +89,26 @@ public class EditorController implements Initializable {
     displayPath(editorModel.getCurrentFilePath()); // displays the path on top
   }
 
-  //  triggered, when the file is open, only saves into the current file
+  /**
+   * Function that saves text into a currently opened file
+   *
+   * @param event action events
+   * @throws IOException when saving fails
+   * */
   @FXML
-  public void handleSave(ActionEvent actionEvent) throws IOException {
+  public void handleSave(ActionEvent event) throws IOException {
     if (filePath == null) {
       return;
     }
     editorModel.writeIntoCurrentFile(text.getText());
   }
 
-  //  creates a new file and saves the text in it
+  /**
+   * Function that creates a new file and saves the texted inside
+   *
+   * @param event action events
+   * @throws IOException when saving or creating goes fails
+   * */
   @FXML
   private void handleSaveAs(ActionEvent event) throws IOException {
     fileChooser.setTitle("Save as...");
@@ -110,7 +121,11 @@ public class EditorController implements Initializable {
     displayPath(editorModel.getCurrentFilePath()); // then display its path
   }
 
-  //  exiting the application
+  /**
+   * Function which will close the app, if the alert is accepted
+   *
+   * @param event action events
+   * */
   @FXML
   private void handleExit(ActionEvent event) {
     Alert alert =
@@ -166,22 +181,29 @@ public class EditorController implements Initializable {
     }
   }
 
-  // FXML handle buttons
+  /**
+   * Function which is triggered by bold button click, sets the text style to bold for entire text area
+   * */
   @FXML
   private void handleToggleBold() {
     handleTextStyleChange(boldToggle, TextType.BOLD);
   }
 
+  /**
+   * Function which is triggered by italic button click, sets the text style to italic for entire text area
+   * */
   @FXML
   private void handleToggleItalic() {
     handleTextStyleChange(italicToggle, TextType.ITALIC);
   }
 
+  /**
+   * Function which is triggered by underline button click, sets the text style to underline for entire text area
+   * */
   @FXML
   private void handleToggleUnderline() {
     handleTextStyleChange(underlineToggle, TextType.UNDERLINE);
   }
-
 
   /**
    * Function that converts the color given by colorPicker into a hex format
@@ -197,7 +219,9 @@ public class EditorController implements Initializable {
             (int)(c.getBlue() * 255 )
     );
   }
-
+  /**
+   * Function which is triggered by the color change from the color picker, sets the color of the text inside the text area
+   * */
   @FXML
   private void handleColorChange() {
     Color color = textColorComboBox.getValue();
