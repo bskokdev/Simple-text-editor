@@ -38,6 +38,8 @@ public class EditorController implements Initializable {
   private FileChooser fileChooser;
   private Stage stage;
   private EditorModel editorModel;
+  private ObservableList<Integer> fontSize;
+  private ObservableList<String> fonts;
 
   public void init(Stage stage) {
     this.stage = stage;
