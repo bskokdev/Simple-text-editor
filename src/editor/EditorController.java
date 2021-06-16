@@ -1,5 +1,6 @@
 package editor;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,9 +21,9 @@ public class EditorController implements Initializable {
 
   @FXML private Label filePath; // displaying path of a file
 
-  @FXML private ChoiceBox<?> fontComboBox;
+  @FXML private ChoiceBox<String> fontComboBox;
 
-  @FXML private ChoiceBox<?> fontSizeComboBox;
+  @FXML private ChoiceBox<Integer> fontSizeComboBox;
 
   @FXML private ColorPicker textColorComboBox;
 
@@ -54,6 +55,16 @@ public class EditorController implements Initializable {
         .addAll(
             new FileChooser.ExtensionFilter("Text file (.txt)", "*.txt"),
             new FileChooser.ExtensionFilter("All Files (.*)", "*.*"));
+  }
+
+  /**
+   * Function that populates given choiceBox (ComboBox) with a list of options
+   *
+   * @param choiceBox selected choiceBox to be populated with the values
+   * @param options the values
+   * */
+  private <T> void populateChoiceBox(ChoiceBox<T> choiceBox, ObservableList<T> options) {
+    choiceBox.setItems(options);
   }
 
   /**
