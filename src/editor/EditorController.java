@@ -40,7 +40,7 @@ public class EditorController implements Initializable {
   private Stage stage;
   private EditorModel editorModel;
   //  lists for choice boxes
-  private final ObservableList<Integer> fontSizes = FXCollections.observableArrayList(1,2,3);
+  private final ObservableList<Integer> fontSizes = FXCollections.observableArrayList(12,16,24,36,48);
   private final ObservableList<String> fonts = FXCollections.observableArrayList("Arial", "Times new Roman", "Comic Sans");
 
   public void init(Stage stage) {
@@ -226,5 +226,13 @@ public class EditorController implements Initializable {
   private void handleColorChange() {
     Color color = textColorComboBox.getValue();
     this.text.setStyle("-fx-text-fill: " + formatColorToHex(color));
+  }
+
+  /**
+   * Function which sets the font size when the value is selected from fontSizeComboBox
+   * */
+  @FXML
+  private void handleFontSizeChange() {
+    this.text.setStyle("-fx-font-size:"+ this.fontSizeComboBox.getValue() + "px");
   }
 }
