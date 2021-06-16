@@ -1,5 +1,6 @@
 package editor;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,8 +39,8 @@ public class EditorController implements Initializable {
   private FileChooser fileChooser;
   private Stage stage;
   private EditorModel editorModel;
-  private ObservableList<Integer> fontSize;
-  private ObservableList<String> fonts;
+  private final ObservableList<Integer> fontSizes = FXCollections.observableArrayList(1,2,3);
+  private final ObservableList<String> fonts = FXCollections.observableArrayList("Arial", "Times new Roman", "Comic Sans");
 
   public void init(Stage stage) {
     this.stage = stage;
@@ -49,14 +50,16 @@ public class EditorController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // defining the model
-    editorModel = new EditorModel();
-    fileChooser = new FileChooser();
+    this.editorModel = new EditorModel();
+    this.fileChooser = new FileChooser();
     // sets the file types to be stored as in the save as dialog window
-    fileChooser
+    this.fileChooser
         .getExtensionFilters()
         .addAll(
             new FileChooser.ExtensionFilter("Text file (.txt)", "*.txt"),
             new FileChooser.ExtensionFilter("All Files (.*)", "*.*"));
+    populateChoiceBox(this.fontSizeComboBox, this.fontSizes);
+    populateChoiceBox(this.fontComboBox, this.fonts);
   }
 
   /**
