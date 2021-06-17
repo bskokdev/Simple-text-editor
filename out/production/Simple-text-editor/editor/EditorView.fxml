@@ -34,7 +34,8 @@
                 </Label>
                 <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                     <children>
-                        <ChoiceBox fx:id="fontComboBox" prefHeight="25.0" prefWidth="155.0">
+                        <ChoiceBox fx:id="fontComboBox" onAction="#handleFontChange" prefHeight="25.0"
+                                   prefWidth="155.0">
                             <cursor>
                                 <Cursor fx:constant="HAND"/>
                             </cursor>
