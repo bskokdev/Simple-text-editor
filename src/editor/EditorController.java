@@ -41,7 +41,7 @@ public class EditorController implements Initializable {
   private EditorModel editorModel;
   //  lists for choice boxes
   private final ObservableList<Integer> fontSizes = FXCollections.observableArrayList(12,16,24,36,48);
-  private final ObservableList<String> fonts = FXCollections.observableArrayList("Arial", "Times new Roman", "Comic Sans");
+  private final ObservableList<String> fonts = FXCollections.observableArrayList("Arial", "Times new Roman");
 
   public void init(Stage stage) {
     this.stage = stage;
@@ -61,6 +61,7 @@ public class EditorController implements Initializable {
             new FileChooser.ExtensionFilter("All Files (.*)", "*.*"));
     populateChoiceBox(this.fontSizeComboBox, this.fontSizes);
     populateChoiceBox(this.fontComboBox, this.fonts);
+    this.fontSizeComboBox.setValue(24); // default font size
   }
 
   /**
@@ -234,5 +235,16 @@ public class EditorController implements Initializable {
   @FXML
   private void handleFontSizeChange() {
     this.text.setStyle("-fx-font-size:"+ this.fontSizeComboBox.getValue() + "px");
+  }
+
+  /**
+   * Function that changes font family to one from the choice box and sets corresponding font size
+   * */
+  @FXML
+  private void handleFontChange() {
+    this.text.setStyle(
+            "-fx-font-family: "+ this.fontComboBox.getValue() +
+            "; -fx-font-size:" + this.fontSizeComboBox.getValue() + "px"
+    );
   }
 }
