@@ -20,6 +20,12 @@ import javafx.stage.Stage;
  */
 public class EditorController implements Initializable {
 
+  private final Stage stage;
+
+  private final ObservableList<Integer> FONT_SIZES;
+
+  private final ObservableList<String> FONTS;
+
   @FXML private TextArea text;
 
   @FXML private Label filePath;
@@ -37,16 +43,13 @@ public class EditorController implements Initializable {
   @FXML private ToggleButton underlineToggle;
 
   private FileChooser fileChooser;
-  private Stage stage;
   private EditorModel editorModel;
 
-  private final ObservableList<Integer> fontSizes =
-      FXCollections.observableArrayList(12, 16, 24, 36, 48);
-
-  private final ObservableList<String> fonts =
-      FXCollections.observableArrayList("Arial", "Times new Roman");
-
-  public EditorController() {}
+  public EditorController() {
+    this.stage = new Stage();
+    this.FONT_SIZES = FXCollections.observableArrayList(12, 16, 24, 36, 48);
+    this.FONTS = FXCollections.observableArrayList("Arial", "Times new Roman");
+  }
 
   /**
    * Function that initializes the controller
@@ -66,8 +69,8 @@ public class EditorController implements Initializable {
             new FileChooser.ExtensionFilter("Text file (.txt)", "*.txt"),
             new FileChooser.ExtensionFilter("All Files (.*)", "*.*"));
 
-    populateChoiceBox(this.fontSizeComboBox, this.fontSizes);
-    populateChoiceBox(this.fontComboBox, this.fonts);
+    populateChoiceBox(this.fontSizeComboBox, this.FONT_SIZES);
+    populateChoiceBox(this.fontComboBox, this.FONTS);
     // setting the default font size
     this.fontSizeComboBox.setValue(24);
   }
