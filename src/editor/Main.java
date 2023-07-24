@@ -1,5 +1,6 @@
 package editor;
 
+import java.util.Objects;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,17 +11,19 @@ public class Main extends Application {
 
   /**
    * Function that starts the application
+   *
    * @param primaryStage primary stage
    * @throws Exception thrown when the application fails to start
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("EditorView.fxml"));
-    EditorController controller = new EditorController(primaryStage);
+    Parent root =
+        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("EditorView.fxml")));
 
-    // windows settings
-    primaryStage.setTitle("Simple text editor");
-    primaryStage.setScene(new Scene(root, 1250, 700)); // w-1250, h-700
+    // window settings
+    primaryStage.setTitle("Notepad editor");
+    // w-1250, h-700
+    primaryStage.setScene(new Scene(root, 1250, 700));
     primaryStage.show();
   }
 

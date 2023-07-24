@@ -40,7 +40,6 @@ public class EditorController implements Initializable {
   private Stage stage;
   private EditorModel editorModel;
 
-  //  lists for choice boxes
   private final ObservableList<Integer> fontSizes =
       FXCollections.observableArrayList(12, 16, 24, 36, 48);
 
@@ -48,10 +47,6 @@ public class EditorController implements Initializable {
       FXCollections.observableArrayList("Arial", "Times new Roman");
 
   public EditorController() {}
-
-  public EditorController(Stage stage) {
-    this.stage = stage;
-  }
 
   /**
    * Function that initializes the controller
@@ -78,17 +73,17 @@ public class EditorController implements Initializable {
   }
 
   /**
-   * Function that populates given combobox with a list of options
+   * Populates the combobox with the values
    *
-   * @param choiceBox selected choiceBox to be populated with the values
-   * @param options the values
+   * @param choiceBox combobox to be populated
+   * @param options the values to be added
    */
   private <T> void populateChoiceBox(ChoiceBox<T> choiceBox, ObservableList<T> options) {
     choiceBox.setItems(options);
   }
 
   /**
-   * Function that handles the opening of a new file
+   * Handles opening a file
    *
    * @throws IOException when opening fails
    */
@@ -100,53 +95,6 @@ public class EditorController implements Initializable {
 
     displayDataToTextArea(editorModel.readTheCurrentFile());
     displayPath(editorModel.getCurrentFilePath());
-  }
-
-  /**
-   * Function that saves text into a currently opened file
-   *
-   * @throws IOException when saving fails
-   */
-  @FXML
-  public void handleSave() throws IOException {
-    if (filePath == null) {
-      return;
-    }
-    editorModel.writeIntoCurrentFile(text.getText());
-  }
-
-  /**
-   * Function that creates a new file and saves the texted inside
-   *
-   * @throws IOException thrown when saving fails
-   */
-  @FXML
-  private void handleSaveAs() throws IOException {
-    fileChooser.setTitle("Save as...");
-    File newFile = fileChooser.showSaveDialog(stage);
-    if (newFile == null) {
-      return;
-    }
-    editorModel.setCurrentFile(newFile); // sets the new file as the current one
-    editorModel.writeIntoCurrentFile(text.getText()); // write into it
-    displayPath(editorModel.getCurrentFilePath()); // then display its path
-  }
-
-  /** Function that handles the exit button click */
-  @FXML
-  private void handleExit() {
-    Alert alert =
-        new Alert(
-            Alert.AlertType.WARNING,
-            "Are you sure you want to exit?",
-            ButtonType.YES,
-            ButtonType.CANCEL);
-
-    alert.setTitle("Confirm");
-    alert.showAndWait();
-    if (alert.getResult() == ButtonType.YES) {
-      System.exit(0);
-    }
   }
 
   /**
@@ -169,6 +117,53 @@ public class EditorController implements Initializable {
    */
   private void displayPath(String path) {
     this.filePath.setText(path);
+  }
+
+  /**
+   * Handles saving a file
+   *
+   * @throws IOException when saving fails
+   */
+  @FXML
+  public void handleSave() throws IOException {
+    if (filePath == null || filePath.getText().isEmpty()) {
+      return;
+    }
+    editorModel.writeIntoCurrentFile(text.getText());
+  }
+
+  /**
+   * Handles saving a file as a new file
+   *
+   * @throws IOException thrown when saving fails
+   */
+  @FXML
+  private void handleSaveAs() throws IOException {
+    fileChooser.setTitle("Save as...");
+    File newFile = fileChooser.showSaveDialog(stage);
+    if (newFile == null) {
+      return;
+    }
+    editorModel.setCurrentFile(newFile);
+    editorModel.writeIntoCurrentFile(text.getText());
+    displayPath(editorModel.getCurrentFilePath());
+  }
+
+  /** Function that handles the exit button click */
+  @FXML
+  private void handleExit() {
+    Alert alert =
+        new Alert(
+            Alert.AlertType.WARNING,
+            "Are you sure you want to exit?",
+            ButtonType.YES,
+            ButtonType.CANCEL);
+
+    alert.setTitle("Confirm");
+    alert.showAndWait();
+    if (alert.getResult() == ButtonType.YES) {
+      System.exit(0);
+    }
   }
 
   /** Handles the bold button click, sets the text style to bold for entire text */
@@ -220,9 +215,7 @@ public class EditorController implements Initializable {
         (int) (c.getRed() * 255), (int) (c.getGreen() * 255), (int) (c.getBlue() * 255));
   }
 
-  /**
-   * Handles the color change, sets the color to the one from the color picker
-   */
+  /** Handles the color change, sets the color to the one from the color picker */
   @FXML
   private void handleColorChange() {
     Color color = textColorComboBox.getValue();
