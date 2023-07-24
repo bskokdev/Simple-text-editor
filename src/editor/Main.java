@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
   /**
-   * Function that starts the application
+   * Entry point of the application
    *
    * @param primaryStage primary stage
    * @throws Exception thrown when the application fails to start
