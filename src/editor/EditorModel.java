@@ -4,29 +4,33 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class that represents the model of the editor
+ * It contains the current file and the functions to read and write into it
+ */
 public class EditorModel {
   private File currentFile;
 
   public EditorModel() {
-    this.currentFile = new File(""); // default filePath
+    this.currentFile = new File("");
   }
 
   /**
-   * Function that reads the currently opened file
+   * Reads the file from the class file path
    *
    * @return lines data read from the file
    */
   public List<String> readTheCurrentFile() throws IOException {
-    // if no file, we return empty list
     if (this.currentFile == null) {
-      return new LinkedList<>();
+      return new ArrayList<>();
     }
     Scanner sc = new Scanner(this.currentFile);
-    List<String> lines = new LinkedList<>();
+    List<String> lines = new ArrayList<>();
     while (sc.hasNextLine()) {
       lines.add(sc.nextLine());
     }
@@ -34,9 +38,9 @@ public class EditorModel {
   }
 
   /**
-   * Function that writes into currently opened file
+   * Writes the text into the current file
    *
-   * @param text text to be written into current file
+   * @param text text to be written to the file
    */
   public void writeIntoCurrentFile(String text) throws IOException {
     PrintWriter writer = new PrintWriter(this.currentFile);
@@ -45,16 +49,18 @@ public class EditorModel {
     out.close();
   }
 
-  /** Function that returns the path of the currently opened file */
+  /**
+   * Getter for the current file path
+   * @return current file path
+   */
   public String getCurrentFilePath() {
     return this.currentFile.getPath();
   }
 
-  // getters, setters
-  public File getCurrentFile() {
-    return currentFile;
-  }
-
+  /**
+   * Setter for the current file
+   * @param currentFile file to be set as current
+   */
   public void setCurrentFile(File currentFile) {
     this.currentFile = currentFile;
   }

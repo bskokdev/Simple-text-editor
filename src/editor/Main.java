@@ -8,11 +8,15 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+  /**
+   * Function that starts the application
+   * @param primaryStage primary stage
+   * @throws Exception thrown when the application fails to start
+   */
   @Override
   public void start(Stage primaryStage) throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("EditorView.fxml"));
-    EditorController controller = new EditorController();
-    controller.init(primaryStage); // passes the primary stage to the editor controller
+    EditorController controller = new EditorController(primaryStage);
 
     // windows settings
     primaryStage.setTitle("Simple text editor");

@@ -1,8 +1,12 @@
 package editor;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,17 +14,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
+/**
+ * Class that represents the controller of the editor It contains the functions that handle the
+ * events and view logic
+ */
 public class EditorController implements Initializable {
 
-  @FXML private TextArea text; // main text area
+  @FXML private TextArea text;
 
-  @FXML private Label filePath; // displaying path of a file
+  @FXML private Label filePath;
 
   @FXML private ChoiceBox<String> fontComboBox;
 
@@ -34,42 +36,53 @@ public class EditorController implements Initializable {
 
   @FXML private ToggleButton underlineToggle;
 
-  @FXML private Label selectedText;
-
   private FileChooser fileChooser;
   private Stage stage;
   private EditorModel editorModel;
-  //  lists for choice boxes
-  private final ObservableList<Integer> fontSizes = FXCollections.observableArrayList(12,16,24,36,48);
-  private final ObservableList<String> fonts = FXCollections.observableArrayList("Arial", "Times new Roman");
 
-  public void init(Stage stage) {
+  //  lists for choice boxes
+  private final ObservableList<Integer> fontSizes =
+      FXCollections.observableArrayList(12, 16, 24, 36, 48);
+
+  private final ObservableList<String> fonts =
+      FXCollections.observableArrayList("Arial", "Times new Roman");
+
+  public EditorController() {}
+
+  public EditorController(Stage stage) {
     this.stage = stage;
   }
 
-  //  on load
+  /**
+   * Function that initializes the controller
+   *
+   * @param url url
+   * @param resourceBundle resource bundle
+   */
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // defining the model & file chooser
     this.editorModel = new EditorModel();
     this.fileChooser = new FileChooser();
-    // sets the file types to be stored as in the save as dialog window
+    // sets the file types to be stored as in the save as a dialog window
     this.fileChooser
         .getExtensionFilters()
         .addAll(
             new FileChooser.ExtensionFilter("Text file (.txt)", "*.txt"),
             new FileChooser.ExtensionFilter("All Files (.*)", "*.*"));
+
     populateChoiceBox(this.fontSizeComboBox, this.fontSizes);
     populateChoiceBox(this.fontComboBox, this.fonts);
-    this.fontSizeComboBox.setValue(24); // default font size
+    // setting the default font size
+    this.fontSizeComboBox.setValue(24);
   }
 
   /**
-   * Function that populates given choiceBox (ComboBox) with a list of options
+   * Function that populates given combobox with a list of options
    *
    * @param choiceBox selected choiceBox to be populated with the values
    * @param options the values
-   * */
+   */
   private <T> void populateChoiceBox(ChoiceBox<T> choiceBox, ObservableList<T> options) {
     choiceBox.setItems(options);
   }
@@ -77,27 +90,25 @@ public class EditorController implements Initializable {
   /**
    * Function that handles the opening of a new file
    *
-   * @param event
-   * @throws IOException
+   * @throws IOException when opening fails
    */
   @FXML
-  private void handleOpen(ActionEvent event) throws IOException {
+  private void handleOpen() throws IOException {
     fileChooser.setTitle("Open a file");
-    editorModel.setCurrentFile(
-        fileChooser.showOpenDialog(stage)); // opens dialog and saves the curr file into model
+    // opens a dialog and saves the curr file into a model
+    editorModel.setCurrentFile(fileChooser.showOpenDialog(stage));
 
-    displayDataToTextArea(editorModel.readTheCurrentFile()); // displays the data into textArea
-    displayPath(editorModel.getCurrentFilePath()); // displays the path on top
+    displayDataToTextArea(editorModel.readTheCurrentFile());
+    displayPath(editorModel.getCurrentFilePath());
   }
 
   /**
    * Function that saves text into a currently opened file
    *
-   * @param event action events
    * @throws IOException when saving fails
-   * */
+   */
   @FXML
-  public void handleSave(ActionEvent event) throws IOException {
+  public void handleSave() throws IOException {
     if (filePath == null) {
       return;
     }
@@ -107,11 +118,10 @@ public class EditorController implements Initializable {
   /**
    * Function that creates a new file and saves the texted inside
    *
-   * @param event action events
-   * @throws IOException when saving or creating goes fails
-   * */
+   * @throws IOException thrown when saving fails
+   */
   @FXML
-  private void handleSaveAs(ActionEvent event) throws IOException {
+  private void handleSaveAs() throws IOException {
     fileChooser.setTitle("Save as...");
     File newFile = fileChooser.showSaveDialog(stage);
     if (newFile == null) {
@@ -122,44 +132,61 @@ public class EditorController implements Initializable {
     displayPath(editorModel.getCurrentFilePath()); // then display its path
   }
 
-  /**
-   * Function which will close the app, if the alert is accepted
-   *
-   * @param event action events
-   * */
+  /** Function that handles the exit button click */
   @FXML
-  private void handleExit(ActionEvent event) {
+  private void handleExit() {
     Alert alert =
         new Alert(
             Alert.AlertType.WARNING,
             "Are you sure you want to exit?",
             ButtonType.YES,
             ButtonType.CANCEL);
+
     alert.setTitle("Confirm");
     alert.showAndWait();
-    if (alert.getResult() == ButtonType.YES) System.exit(0);
+    if (alert.getResult() == ButtonType.YES) {
+      System.exit(0);
+    }
   }
 
   /**
-   * Function that displays the data to the textArea
+   * Displays text into the text area
    *
-   * @param lines lines of text
+   * @param lines List of lines to be displayed
    */
   private void displayDataToTextArea(List<String> lines) {
     StringBuilder readText = new StringBuilder();
     for (String line : lines) {
-      readText.append(line).append("\n"); // lines + a new line
+      readText.append(line).append("\n");
     }
     text.setText(readText.toString());
   }
 
   /**
-   * Function that display the path of the opened file on top of the app
+   * Displays the path of the file into the label
    *
    * @param path the path to be displayed
    */
   private void displayPath(String path) {
     this.filePath.setText(path);
+  }
+
+  /** Handles the bold button click, sets the text style to bold for entire text */
+  @FXML
+  private void handleToggleBold() {
+    handleTextStyleChange(boldToggle, TextType.BOLD);
+  }
+
+  /** Handles the italic button click, sets the text style to italic for entire text */
+  @FXML
+  private void handleToggleItalic() {
+    handleTextStyleChange(italicToggle, TextType.ITALIC);
+  }
+
+  /** Handles the underline button click, sets the text style to underline for entire text */
+  @FXML
+  private void handleToggleUnderline() {
+    handleTextStyleChange(underlineToggle, TextType.UNDERLINE);
   }
 
   /**
@@ -169,12 +196,11 @@ public class EditorController implements Initializable {
    * @param typeOfText the text type that should be set to the text area
    */
   private void handleTextStyleChange(ToggleButton button, TextType typeOfText) {
-    // checks for the selection of the button, if not selected, no style is applied
     if (button.isSelected()) {
       switch (typeOfText) {
         case BOLD -> this.text.setStyle("-fx-font-weight:bold; -fx-font-size: 16px");
         case ITALIC -> this.text.setStyle("-fx-font-style:italic; -fx-font-size: 16px");
-//      case UNDERLINE -> this.text.setStyle("-fx-underline:true;");
+        case UNDERLINE -> this.text.setStyle("-fx-underline:true;");
         default -> throw new IllegalStateException("Unexpected value: " + typeOfText);
       }
     } else {
@@ -183,68 +209,40 @@ public class EditorController implements Initializable {
   }
 
   /**
-   * Function which is triggered by bold button click, sets the text style to bold for entire text area
-   * */
-  @FXML
-  private void handleToggleBold() {
-    handleTextStyleChange(boldToggle, TextType.BOLD);
-  }
-
-  /**
-   * Function which is triggered by italic button click, sets the text style to italic for entire text area
-   * */
-  @FXML
-  private void handleToggleItalic() {
-    handleTextStyleChange(italicToggle, TextType.ITALIC);
-  }
-
-  /**
-   * Function which is triggered by underline button click, sets the text style to underline for entire text area
-   * */
-  @FXML
-  private void handleToggleUnderline() {
-    handleTextStyleChange(underlineToggle, TextType.UNDERLINE);
-  }
-
-  /**
-   * Function that converts the color given by colorPicker into a hex format
+   * Converts the color to hex format
    *
-   * @param c Color
+   * @param c Color to be converted
    * @return hex formatted color
-   * */
+   */
   private String formatColorToHex(Color c) {
     return String.format(
-            "#%02X%02X%02X",
-            (int)(c.getRed() * 255),
-            (int)(c.getGreen() * 255),
-            (int)(c.getBlue() * 255 )
-    );
+        "#%02X%02X%02X",
+        (int) (c.getRed() * 255), (int) (c.getGreen() * 255), (int) (c.getBlue() * 255));
   }
+
   /**
-   * Function which is triggered by the color change from the color picker, sets the color of the text inside the text area
-   * */
+   * Handles the color change, sets the color to the one from the color picker
+   */
   @FXML
   private void handleColorChange() {
     Color color = textColorComboBox.getValue();
     this.text.setStyle("-fx-text-fill: " + formatColorToHex(color));
   }
 
-  /**
-   * Function which sets the font size when the value is selected from fontSizeComboBox
-   * */
+  /** Handles the font size change, sets the font size to the one from the choice box */
   @FXML
   private void handleFontSizeChange() {
-    this.text.setStyle("-fx-font-size:"+ this.fontSizeComboBox.getValue() + "px");
+    this.text.setStyle("-fx-font-size:" + this.fontSizeComboBox.getValue() + "px");
   }
 
-  /**
-   * Function that changes font family to one from the choice box and sets corresponding font size
-   * */
+  /** Handles the font change, sets the font to the one from the choice box */
   @FXML
   private void handleFontChange() {
     this.text.setStyle(
-            "-fx-font-family: "+ this.fontComboBox.getValue() +
-            "; -fx-font-size:" + this.fontSizeComboBox.getValue() + "px"
-    );
+        "-fx-font-family: "
+            + this.fontComboBox.getValue()
+            + "; -fx-font-size:"
+            + this.fontSizeComboBox.getValue()
+            + "px");
   }
 }
