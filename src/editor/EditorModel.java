@@ -5,13 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Class that represents the model of the editor
- * It contains the current file and the functions to read and write into it
+ * Class that represents the model of the editor.
  */
 public class EditorModel {
   private File currentFile;
@@ -51,6 +49,7 @@ public class EditorModel {
 
   /**
    * Getter for the current file path
+   *
    * @return current file path
    */
   public String getCurrentFilePath() {
@@ -59,6 +58,7 @@ public class EditorModel {
 
   /**
    * Setter for the current file
+   *
    * @param currentFile file to be set as current
    */
   public void setCurrentFile(File currentFile) {
